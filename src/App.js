@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import "bootswatch/dist/lux/bootstrap.min.css"
+import axios from 'axios'
+import React, { Component } from 'react'
+import Output from './Components/Output'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      text: ''
+    }
+  }
+
+  componentWillMount(){
+    this.getSampleText()
+  }
+  getSampleText(){
+    axios.get('https://baconipsum.com/api/?type=all-meat&paras=3&start-with-lorem=1&format=text')
+      .then((response) => {
+        this.setState({text: response.data}, function(){
+          console.log(this.state)
+        });
+      })
+      .catch((err) => {
+        console.log(err)
+
+      });
+  }
+  render() {
+    return (
+      <div className="App">
+        <Output value={this.state.text}/>
+      </div>
+    );
+  }
 }
 
 export default App;
